@@ -9,7 +9,14 @@ from constants import (
 
 
 class Difficulty:
+    """
+    Represents the difficulty level of the game.
+    """
     def __init__(self, name, min_num, max_num):
+        """
+        Initializes the difficulty level with a name,
+        minimum, and maximum numbers.
+        """
         self.name = name
         self.min_num = min_num
         self.max_num = max_num
