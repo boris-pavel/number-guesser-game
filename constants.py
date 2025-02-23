@@ -1,6 +1,8 @@
 WELCOME_MESSAGE = "Welcome to the Number Guessing Game!"
 DIFFICULTY_PROMPT = "Choose a difficulty level (easy, medium, hard): "
-INVALID_DIFFICULTY_MESSAGE = "Invalid difficulty level. Please choose from easy, medium, or hard."
+INVALID_DIFFICULTY_MESSAGE = (
+    "Invalid difficulty level. Please choose from easy, medium, or hard."
+)
 SECRET_NUMBER_RANGE_MESSAGE = "I've chosen a secret number between {} and {}."
 GUESS_PROMPT = "Enter your guess: "
 INVALID_INPUT_MESSAGE = "Invalid input: {}"
