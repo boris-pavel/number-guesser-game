@@ -16,13 +16,24 @@ class Difficulty:
 
 
 class Game:
+    """
+    Represents the number guessing game.
+
+    Attributes:
+        difficulty (Difficulty): The difficulty level of the game.
+        secret_number (int): The secret number to be guessed.
+        remaining_guesses (int): The number of guesses the player has left.
+        game_won (bool): Indicates whether the game has been won.
+    """
     def __init__(self):
+        """Initializes the game with default values."""
         self.difficulty = None
         self.secret_number = None
         self.remaining_guesses = None
         self.game_won = False
 
     def start_game(self):
+        """Starts the number guessing game."""
         self.set_difficulty()
         self.secret_number = random.randint(
             self.difficulty.min_num, self.difficulty.max_num
@@ -41,6 +52,7 @@ class Game:
             self.handle_guess()
 
     def set_difficulty(self):
+        """Sets the difficulty level of the game."""
         difficulty_name = get_difficulty_level()
         if difficulty_name == "easy":
             self.difficulty = Difficulty("easy", 1, 10)
@@ -50,6 +62,7 @@ class Game:
             self.difficulty = Difficulty("hard", 1, 100)
 
     def handle_guess(self):
+        """Handles a single guess from the player."""
         guess = get_user_guess()
         if guess < self.difficulty.min_num or guess > self.difficulty.max_num:
             display_message(
@@ -79,6 +92,7 @@ class Game:
                 ))
 
     def check_guess(self, guess):
+        """Checks the player's guess against the secret number."""
         if guess < self.secret_number:
             return TOO_LOW_MESSAGE
         elif guess > self.secret_number:
