@@ -1,10 +1,15 @@
 import random
-from utils import check_guess, get_difficulty_level  # Import necessary functions
+from utils import check_guess
+from io_handler import get_difficulty_level, display_message, get_user_guess
+
+MAX_GUESSES = 7  # Define the maximum number of guesses allowed
 
 def number_guessing_game():
-    """Runs the number guessing game with difficulty levels."""
+    """
+    Runs the number guessing game with difficulty levels and a limited number of guesses.
+    """
 
-    difficulty = get_difficulty_level()  # Get difficulty level from utils.py
+    difficulty = get_difficulty_level()
 
     if difficulty == "easy":
         min_num, max_num = 1, 10
@@ -14,32 +19,32 @@ def number_guessing_game():
         min_num, max_num = 1, 100
 
     secret_number = random.randint(min_num, max_num)
-    attempts = 0
+    remaining_guesses = MAX_GUESSES  # Initialize remaining guesses
 
-    print("Welcome to the Number Guessing Game!")
-    print(f"I've chosen a secret number between {min_num} and {max_num}.")
+    display_message("Welcome to the Number Guessing Game!")
+    display_message(f"I've chosen a secret number between {min_num} and {max_num}.")
+    display_message(f"You have {remaining_guesses} guesses.")  # Display initial guesses
 
-    while True:
-        try:
-            guess = input("Enter your guess: ")
-            if not guess:  # Check for empty input
-                raise ValueError("Please enter a number.")
+    while remaining_guesses > 0:
+        guess = get_user_guess()
+        if guess < min_num or guess > max_num:
+            display_message(f"Your guess must be between {min_num} and {max_num}.")
+            continue
 
-            guess = int(guess)  # Convert to integer after checking for empty input
-            if guess < min_num or guess > max_num:  # Check if guess is outside the range
-                raise ValueError(f"Your guess must be between {min_num} and {max_num}.")
+        remaining_guesses -= 1  # Decrement remaining guesses
 
-            attempts += 1
+        result = check_guess(guess, secret_number)
+        display_message(result)
 
-            result = check_guess(guess, secret_number)  # Use check_guess from utils.py
-            print(result)
-
-            if "Congratulations" in result:
-                print(f"You guessed the number in {attempts} attempts.")
-                break
-
-        except ValueError as e:
-            print(f"Invalid input: {e}")
+        if "Congratulations" in result:
+            display_message(f"You guessed the number in {MAX_GUESSES - remaining_guesses} attempts.")
+            break
+        else:
+            if remaining_guesses > 0:
+                display_message(f"You have {remaining_guesses} guesses left.")
+            else:
+                display_message("You're out of guesses! Game over.")
+                display_message(f"The secret number was {secret_number}.")
 
 if __name__ == "__main__":
     number_guessing_game()
