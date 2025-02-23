@@ -1,6 +1,8 @@
 import unittest
 from unittest import mock
-from utils import check_guess, get_difficulty_level  # Import get_difficulty_level
+import unittest
+from utils import check_guess
+from io_handler import get_difficulty_level  # Import from io_handler.py
 
 class TestNumberGuesser(unittest.TestCase):
 

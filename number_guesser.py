@@ -40,9 +40,6 @@ def number_guessing_game():
 
         except ValueError as e:
             print(f"Invalid input: {e}")
-        except KeyboardInterrupt:
-            print("\nThanks for playing!")
-            break
 
 if __name__ == "__main__":
     number_guessing_game()
