@@ -1,12 +1,12 @@
-def get_difficulty_level():
-    """Gets the desired difficulty level from the player."""
+from constants import DIFFICULTY_PROMPT,EMPTY_INPUT_MESSAGE, INVALID_DIFFICULTY_MESSAGE, GUESS_PROMPT, INVALID_INPUT_MESSAGE  # Import necessary constants
 
+def get_difficulty_level():
     while True:
-        difficulty = input("Choose a difficulty level (easy, medium, hard): ").lower()
+        difficulty = input(DIFFICULTY_PROMPT).lower()  # Use DIFFICULTY_PROMPT constant
         if difficulty in ["easy", "medium", "hard"]:
             return difficulty
         else:
-            print("Invalid difficulty level. Please choose from easy, medium, or hard.")
+            print(INVALID_DIFFICULTY_MESSAGE)  # Use INVALID_DIFFICULTY_MESSAGE constant
 
 def display_message(message):
     """Displays a message to the user."""
@@ -18,10 +18,10 @@ def get_user_guess():
 
     while True:
         try:
-            guess = input("Enter your guess: ")
+            guess = input(GUESS_PROMPT)
             if not guess:
-                raise ValueError("Please enter a number.")
+                raise ValueError(EMPTY_INPUT_MESSAGE)  # Use EMPTY_INPUT_MESSAGE constant
             guess = int(guess)
             return guess
         except ValueError as e:
-            print(f"Invalid input: {e}")
+            print(INVALID_INPUT_MESSAGE.format(e))  # Use INVALID_INPUT_MESSAGE constant
