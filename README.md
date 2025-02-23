@@ -27,5 +27,4 @@ This is a simple number guessing game written in Python. The computer generates 
 
 Boris-Andrei Pavel
 
-## License
 
