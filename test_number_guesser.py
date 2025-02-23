@@ -1,5 +1,5 @@
 import unittest
-from number_guesser import check_guess  # Import check_guess directly
+from utils import check_guess  # Import check_guess directly
 
 class TestNumberGuesser(unittest.TestCase):
 
