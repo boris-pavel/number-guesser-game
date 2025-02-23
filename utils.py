@@ -1,16 +1,7 @@
 def check_guess(guess, secret_number):
-    """Checks the player's guess against the secret number.
-
-    Args:
-        guess: The player's guess (integer).
-        secret_number: The secret number (integer).
-
-    Returns:
-        A string indicating the result of the guess ("Too low!", "Too high!", or a congratulatory message).
-    """
     if guess < secret_number:
-        return "Too low!"
+        return "Your guess is too low. Try a higher number."
     elif guess > secret_number:
-        return "Too high!"
+        return "Your guess is too high. Try a lower number."
     else:
         return f"Congratulations! You guessed the number."

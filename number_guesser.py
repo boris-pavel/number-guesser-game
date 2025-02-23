@@ -13,17 +13,26 @@ def number_guessing_game():
 
     while True:
         try:
-            guess = int(input("Enter your guess: "))
+            guess = input("Enter your guess: ")
+            if not guess:  # Check for empty input
+                raise ValueError("Please enter a number.")
+
+            guess = int(guess)  # Convert to integer after checking for empty input
+            if guess < 1 or guess > 100:  # Check if guess is outside the range
+                raise ValueError("Your guess must be between 1 and 100.")
+
             attempts += 1
 
             result = check_guess(guess, secret_number)
             print(result)
 
-            if "Congratulations" in result:  # Check for the congratulatory message
+            if "Congratulations" in result:
                 print(f"You guessed the number in {attempts} attempts.")
                 break
-        except ValueError:
-            print("Invalid input. Please enter a number.")
+
+        except ValueError as e:
+            print(f"Invalid input: {e}")  # Print specific error message
+
 
 if __name__ == "__main__":
     number_guessing_game()
