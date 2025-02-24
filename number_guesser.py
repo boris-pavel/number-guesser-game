@@ -58,14 +58,13 @@ class Game:
         while self.remaining_guesses > 0 and not self.game_won:
             self.handle_guess()
 
-    def set_difficulty(self):
+    def set_difficulty(self, difficulty):
         """
         Sets the difficulty level of the game.
         """
-        difficulty_name = get_difficulty_level()
-        if difficulty_name == "easy":
+        if difficulty == "easy":
             self.difficulty = Difficulty("easy", 1, 10)
-        elif difficulty_name == "medium":
+        elif difficulty == "medium":
             self.difficulty = Difficulty("medium", 1, 50)
         else:
             self.difficulty = Difficulty("hard", 1, 100)

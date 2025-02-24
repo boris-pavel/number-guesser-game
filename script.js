@@ -2,6 +2,7 @@ const guessInput = document.getElementById('guess');
 const submitButton = document.getElementById('submit');
 const difficultySelect = document.getElementById('difficulty');
 const messageDiv = document.getElementById('message');
+const remainingGuessesDiv = document.getElementById('remaining-guesses');
 
 submitButton.addEventListener('click', () => {
   const guess = parseInt(guessInput.value);
@@ -31,25 +32,26 @@ submitButton.addEventListener('click', () => {
   }
 
   // Send request to backend
-  fetch('/check_guess', {
+  fetch('http://127.0.0.1:5000/check_guess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ guess: guess, difficulty: difficulty })
   })
-.then(response => response.json())
-.then(data => {
-    // Handle response from backend
+  .then(response => response.json())
+  .then(data => {
     messageDiv.textContent = data.result;
+    remainingGuessesDiv.textContent = `Remaining Guesses: ${data.remaining_guesses}`;
 
-    if (data.result === "Correct!") {
-      // TODO: End the game or display a congratulatory message
-    } else {
-      // TODO: Update remaining guesses and allow another guess
+    if (data.result === "Congratulations! You guessed the number." || data.remaining_guesses === 0) {
+      // End the game
+      guessInput.disabled = true;
+      submitButton.disabled = true;
+      difficultySelect.disabled = true;
     }
   })
-.catch(error => {
+  .catch(error => {
     console.error('Error:', error);
     messageDiv.textContent = "An error occurred.";
   });

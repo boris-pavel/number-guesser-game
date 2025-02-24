@@ -1,8 +1,10 @@
 import random
 from flask import Flask, request, jsonify
 from number_guesser import Game, MAX_GUESSES
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 game = Game()
 
 
