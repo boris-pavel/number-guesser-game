@@ -33,5 +33,19 @@ def check_guess():
     return jsonify({'result': result, 'remaining_guesses': remaining_guesses})
 
 
+@app.route('/remaining_guesses', methods=['GET'])
+def remaining_guesses():
+    global game  # Access the global game object
+    remaining_guesses = game.get_remaining_guesses()
+    return jsonify({'remaining_guesses': remaining_guesses})
+
+
+@app.route('/reset_game', methods=['POST'])
+def reset_game():
+    global game  # Access the global game object
+    game = Game()  # Reset the game object
+    return jsonify({'remaining_guesses': MAX_GUESSES})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

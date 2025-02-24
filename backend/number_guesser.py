@@ -1,5 +1,5 @@
 import random
-from io_handler import get_difficulty_level, display_message, get_user_guess
+from io_handler import display_message, get_user_guess
 from constants import (
     MAX_GUESSES, WELCOME_MESSAGE, SECRET_NUMBER_RANGE_MESSAGE,
     GUESSES_LEFT_MESSAGE, GUESS_RANGE, CORRECT_GUESS_MESSAGE,
