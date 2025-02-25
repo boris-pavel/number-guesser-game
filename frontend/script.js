@@ -1,20 +1,9 @@
 const guessInput = document.getElementById('guess');
 const submitButton = document.getElementById('submit');
 const difficultySelect = document.getElementById('difficulty');
-const messageDiv = document.getElementById('message');
-const remainingGuessesDiv = document.getElementById('remaining-guesses');
+const congratulationsMessageDiv = document.getElementById('congratulations-message');
+const attemptsMessageDiv = document.getElementById('attempts-message');
 const resetButton = document.getElementById('reset');
-
-function fetchRemainingGuesses() {
-  fetch('http://127.0.0.1:5000/remaining_guesses')
-    .then(response => response.json())
-    .then(data => {
-      remainingGuessesDiv.textContent = `Remaining Guesses: ${data.remaining_guesses}`;
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
 
 submitButton.addEventListener('click', () => {
   const guess = parseInt(guessInput.value);
@@ -22,7 +11,7 @@ submitButton.addEventListener('click', () => {
 
   // Validate input
   if (isNaN(guess)) {
-    messageDiv.textContent = "Please enter a valid number.";
+    congratulationsMessageDiv.textContent = "Please enter a valid number.";
     return;
   }
 
@@ -39,7 +28,7 @@ submitButton.addEventListener('click', () => {
   }
 
   if (guess < minNum || guess > maxNum) {
-    messageDiv.textContent = `Please enter a number between ${minNum} and ${maxNum}.`;
+    congratulationsMessageDiv.textContent = `Please enter a number between ${minNum} and ${maxNum}.`;
     return;
   }
 
@@ -53,10 +42,15 @@ submitButton.addEventListener('click', () => {
   })
   .then(response => response.json())
   .then(data => {
-    messageDiv.textContent = data.result;
-    remainingGuessesDiv.textContent = `Remaining Guesses: ${data.remaining_guesses}`;
+    if (data.result.includes("Congratulations!")) {
+      congratulationsMessageDiv.textContent = "Congratulations!";
+      attemptsMessageDiv.textContent = data.result.split("Congratulations!")[1].trim();
+    } else {
+      congratulationsMessageDiv.textContent = data.result;
+      attemptsMessageDiv.textContent = "";
+    }
 
-    if (data.result === "Congratulations! You guessed the number." || data.remaining_guesses === 0) {
+    if (data.result === "Congratulations!" || data.remaining_guesses === 0) {
       // End the game
       guessInput.disabled = true;
       submitButton.disabled = true;
@@ -65,7 +59,7 @@ submitButton.addEventListener('click', () => {
   })
   .catch(error => {
     console.error('Error:', error);
-    messageDiv.textContent = "An error occurred.";
+    congratulationsMessageDiv.textContent = "An error occurred.";
   });
 });
 
@@ -83,30 +77,27 @@ resetButton.addEventListener('click', () => {
     submitButton.disabled = false;
     difficultySelect.disabled = false;
     guessInput.value = '';
-    messageDiv.textContent = '';
-    remainingGuessesDiv.textContent = `Remaining Guesses: ${data.remaining_guesses}`;
+    congratulationsMessageDiv.textContent = '';
+    attemptsMessageDiv.textContent = '';
   })
   .catch(error => {
     console.error('Error:', error);
-    messageDiv.textContent = "An error occurred.";
+    congratulationsMessageDiv.textContent = "An error occurred.";
   });
 });
-
-// Fetch remaining guesses on page load
-document.addEventListener('DOMContentLoaded', fetchRemainingGuesses);
 
 function updateGameMessage() {
     const difficulty = document.getElementById('difficulty').value;
     const gameMessage = document.getElementById('game-message');
     switch (difficulty) {
         case 'easy':
-            gameMessage.textContent = "I've chosen a number between 1 and 10. Can you guess it? (Easy)";
+            gameMessage.textContent = "I've chosen a number between 1 and 10.";
             break;
         case 'medium':
-            gameMessage.textContent = "I've chosen a number between 1 and 50. Can you guess it? (Medium)";
+            gameMessage.textContent = "I've chosen a number between 1 and 50.";
             break;
         case 'hard':
-            gameMessage.textContent = "I've chosen a number between 1 and 100. Can you guess it? (Hard)";
+            gameMessage.textContent = "I've chosen a number between 1 and 100.";
             break;
     }
 }

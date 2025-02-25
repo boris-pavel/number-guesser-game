@@ -1,9 +1,10 @@
 import random
-from io_handler import display_message, get_user_guess
 from constants import (
-    MAX_GUESSES, WELCOME_MESSAGE, SECRET_NUMBER_RANGE_MESSAGE,
-    GUESSES_LEFT_MESSAGE, GUESS_RANGE, CORRECT_GUESS_MESSAGE,
-    ATTEMPS_TRIED, OUT_OF_GUESSES_MESSAGE, SECRET_NUMBER_WAS_MESSAGE,
+    MAX_GUESSES,
+    GUESSES_LEFT_MESSAGE,
+    GUESS_RANGE, CORRECT_GUESS_MESSAGE,
+    ATTEMPS_TRIED, OUT_OF_GUESSES_MESSAGE,
+    SECRET_NUMBER_WAS_MESSAGE,
     TOO_LOW_MESSAGE, TOO_HIGH_MESSAGE
 )
 
@@ -36,27 +37,18 @@ class Game:
         self.remaining_guesses = None
         self.game_won = False
 
-    def start_game(self):
+    def start_game(self, difficulty):
         """
         Starts the game by setting the difficulty level,
-        generating a secret number, and prompting the user for guesses.
+        generating a secret number, and initializing guesses.
         """
-        self.set_difficulty()
+        self.set_difficulty(difficulty)
         self.secret_number = random.randint(
             self.difficulty.min_num,
             self.difficulty.max_num
             )
         self.remaining_guesses = MAX_GUESSES
         self.game_won = False
-
-        display_message(WELCOME_MESSAGE)
-        display_message(
-            SECRET_NUMBER_RANGE_MESSAGE.format(self.difficulty.min_num,
-                                               self.difficulty.max_num))
-        display_message(GUESSES_LEFT_MESSAGE.format(self.remaining_guesses))
-
-        while self.remaining_guesses > 0 and not self.game_won:
-            self.handle_guess()
 
     def set_difficulty(self, difficulty):
         """
@@ -69,35 +61,31 @@ class Game:
         else:
             self.difficulty = Difficulty("hard", 1, 100)
 
-    def handle_guess(self):
+    def handle_guess(self, guess):
         """
         Handles the user's guess by checking if it is correct,
         too low, or too high.
         """
-        guess = get_user_guess()
         if guess < self.difficulty.min_num or guess > self.difficulty.max_num:
-            display_message(
-                GUESS_RANGE.format(
-                    self.difficulty.min_num,
-                    self.difficulty.max_num
-                    ))
-            return
+            return GUESS_RANGE.format(
+                self.difficulty.min_num, self.difficulty.max_num
+                )
 
         self.remaining_guesses -= 1
         result = self.check_guess(guess)
-        display_message(result)
 
         if CORRECT_GUESS_MESSAGE in result:
-            display_message(
-                ATTEMPS_TRIED.format(MAX_GUESSES - self.remaining_guesses))
+            result += ATTEMPS_TRIED.format(
+                MAX_GUESSES - self.remaining_guesses
+                )
             self.game_won = True
         elif self.remaining_guesses > 0:
-            display_message(GUESSES_LEFT_MESSAGE.format(
-                self.remaining_guesses))
+            result += GUESSES_LEFT_MESSAGE.format(self.remaining_guesses)
         else:
-            display_message(OUT_OF_GUESSES_MESSAGE)
-            display_message(SECRET_NUMBER_WAS_MESSAGE.format(
-                self.secret_number))
+            result += OUT_OF_GUESSES_MESSAGE
+            result += SECRET_NUMBER_WAS_MESSAGE.format(self.secret_number)
+
+        return result
 
     def check_guess(self, guess):
         """

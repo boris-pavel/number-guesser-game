@@ -1,4 +1,3 @@
-import random
 from flask import Flask, request, jsonify
 from number_guesser import Game, MAX_GUESSES
 from flask_cors import CORS
@@ -16,28 +15,16 @@ def check_guess():
     guess = data['guess']
     difficulty = data['difficulty']
 
-    # Initialize the game with the chosen
-    # difficulty if it hasn't been started yet
+    # Initialize the game with the chosen difficulty 
+    # if it hasn't been started yet
     if not game.difficulty:
-        game.set_difficulty(difficulty)  # Set the difficulty directly
-        game.secret_number = random.randint(
-            game.difficulty.min_num,
-            game.difficulty.max_num
-            )
-        game.remaining_guesses = MAX_GUESSES
+        game.start_game(difficulty)  # Use the start_game method
 
-    # Use the check_guess method of the Game object
-    result = game.check_guess(guess)
+    # Use the handle_guess method of the Game object
+    result = game.handle_guess(guess)
     remaining_guesses = game.get_remaining_guesses()
 
     return jsonify({'result': result, 'remaining_guesses': remaining_guesses})
-
-
-@app.route('/remaining_guesses', methods=['GET'])
-def remaining_guesses():
-    global game  # Access the global game object
-    remaining_guesses = game.get_remaining_guesses()
-    return jsonify({'remaining_guesses': remaining_guesses})
 
 
 @app.route('/reset_game', methods=['POST'])
